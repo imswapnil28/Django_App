@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Article_Assignment</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <h1 class="text-center">Article_Assignment</h1>
+                <form id="parseForm" class="mt-4">
+                    <div class="form-group">
+                        <label for="textInput">Enter Text to Parse</label>
+                        <textarea id="textInput" class="form-control" rows="5" placeholder="Enter the text here"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="fieldsInput">Fields to Extract (comma-separated)</label>
+                        <input type="text" id="fieldsInput" class="form-control" placeholder="e.g., Name, Age, Biography">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+                </form>
+                <h2 class="mt-5">Parsed Output:</h2>
+                <div id="output" class="bg-light p-3 border rounded"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function submitForm() {
+            var text = document.getElementById('textInput').value;
+            var fields = document.getElementById('fieldsInput').value.split(',').map(field => field.trim());
+            
+            fetch('/parse/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text, fields: fields })
+            })
+            .then(response => response.json())
+            .then(data => {
+                var outputElement = document.getElementById('output');
+                outputElement.innerHTML = '';  // Clear previous output
+
+                if (data.error) {
+                    outputElement.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
+                } else {
+                    var formattedData = '<ul class="list-group">';
+                    for (var key in data) {
+                        formattedData += `<li class="list-group-item"><strong>${key}:</strong> ${data[key]}</li>`;
+                    }
+                    formattedData += '</ul>';
+                    outputElement.innerHTML = formattedData;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
