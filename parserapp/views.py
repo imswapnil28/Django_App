@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.middleware.csrf import get_token
 
-openai.api_key = 'sk-proj-a19lE1yniLUAt3Mn9TqRT3BlbkFJ5IUFGKaTjLKROuwYP12O'  # Replace with your OpenAI API key
+openai.api_key = 'sk-proj-ODQ7BLuwf0mKdjFVrYlAT3BlbkFJzxZBSE7dDAmNG7qZ2dmP'  # Replace with your OpenAI API key
 
 
 def parse_text_with_chatgpt(text, fields):
